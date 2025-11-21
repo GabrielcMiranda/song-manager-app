@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from datetime import datetime
-from src.database.config import Base
+from app.database.config import Base
 
 
 class Song(Base):
