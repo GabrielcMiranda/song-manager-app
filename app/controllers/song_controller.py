@@ -46,3 +46,15 @@ class SongController:
             return None
 
         return new_song
+    
+    @staticmethod
+    def get_song_by_id():
+        try:
+            song_id = int(input("\n\nEnter song ID: ").strip())
+            song = SongService.get_by_id(song_id)
+            input("\nPress Enter to continue...")
+        except Exception as e:
+            print(f"Error: {e}")
+            input("\nPress Enter to continue...")
+            return None
+        return song

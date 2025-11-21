@@ -7,7 +7,8 @@ while(True):
     print("Choose an option:")
     print("1. List songs")
     print("2. Store a new song")
-    print("3. Exit\n\n")
+    print("3. Search song by ID")
+    print("4. Exit\n\n")
 
     choice = input("Option: ")
 
@@ -18,4 +19,7 @@ while(True):
         SongController.create_song()
 
     if choice == "3":
+        SongController.get_song_by_id()
+
+    if choice == "4":
         break
