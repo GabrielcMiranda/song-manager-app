@@ -9,21 +9,23 @@ class SongController:
     def list_songs():
         try:
             songs = SongService.list()
+            input("\nPress Enter to continue...")
         except Exception as e:
             print(f"Error: {e}")
+            input("\nPress Enter to continue...")
             return []
         return songs
 
     @staticmethod
     def create_song():
         try:
-            title = input("Enter song title: ")
-            artist = input("Enter artist name: ")
-            album = input("Enter album name (optional): ") or None
-            genre = input("Enter genre (optional): ") or None
-            year_input = input("Enter year (optional): ") or None
+            title = input("\n\nEnter song title: ").strip()
+            artist = input("Enter artist name: ").strip()
+            album = input("Enter album name (optional): ").strip() or None
+            genre = input("Enter genre (optional): ").strip() or None
+            year_input = input("Enter year (optional): ").strip() or None
             year = int(year_input) if year_input else None
-            duration_input = input("Enter duration in seconds (optional): ") or None
+            duration_input = input("Enter duration in seconds (optional): ").strip() or None
             duration = float(duration_input) if duration_input else None
             
             song_data = SongRequest(
@@ -36,10 +38,11 @@ class SongController:
             )
             
             new_song = SongService.create(song_data)
-            print(f"Song {new_song.title} created with ID: {new_song.id}")
-
+            print(f"\n\nSong {new_song.title} created with ID: {new_song.id}")
+            input("\nPress Enter to continue...")
         except Exception as e:
             print(f"Error: {e}")
+            input("\nPress Enter to continue...")
             return None
 
         return new_song

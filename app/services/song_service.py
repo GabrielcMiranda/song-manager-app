@@ -13,10 +13,10 @@ class SongService:
             result = session.query(Song).all()
             
             if not result:
-                raise Exception("No songs found!")
+                raise Exception("\n\nNo songs found!")
             
             for song in result:
-                print(f"Song #{song.id}: {song.title} by {song.artist} - {song.year}")
+                print(f"\n\nSong #{song.id}: {song.title} by {song.artist} - {song.year}")
             
             return result
     
