@@ -57,4 +57,26 @@ class SongService:
             
             return song
         
+    @staticmethod
+    def update(song_id: int, song_data: SongRequest):
+        
+        with get_session() as session:
+            
+            song = session.query(Song).filter(Song.id == song_id).first()
+            
+            if not song:
+                raise Exception(f"\n\nSong with ID {song_id} not found!")
+            
+            song.title = song_data.title
+            song.artist = song_data.artist
+            song.album = song_data.album
+            song.genre = song_data.genre
+            song.year = song_data.year
+            song.duration = song_data.duration
+            
+            session.commit()
+            session.refresh(song)
+            
+            return song
+        
     
