@@ -4,15 +4,11 @@ CREATE TABLE IF NOT EXISTS songs (
     artist VARCHAR(200) NOT NULL,
     album VARCHAR(200),
     genre VARCHAR(100),
-    year INTEGER,
+    release_date DATE,
     duration REAL, 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE INDEX IF NOT EXISTS idx_songs_title ON songs(title);
-CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist);
-CREATE INDEX IF NOT EXISTS idx_songs_genre ON songs(genre);
 
 CREATE TRIGGER IF NOT EXISTS update_songs_timestamp 
 AFTER UPDATE ON songs

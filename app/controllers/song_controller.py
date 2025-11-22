@@ -1,14 +1,15 @@
 
 from app.schemas.song_schema import SongRequest
 from app.services.song_service import SongService
-
+from datetime import datetime
+from pydantic import ValidationError
 
 class SongController:
 
     @staticmethod
     def list_songs():
         try:
-            songs = SongService.list()
+            SongService.list()
             input("\nPress Enter to continue...")
         except Exception as e:
             print(f"\nError: {e}")
@@ -22,6 +23,18 @@ class SongController:
             new_song = SongService.create(song_data)
             print(f"\n\nSong {new_song.title} created with ID: {new_song.id}")
             input("\nPress Enter to continue...")
+            
+        except ValidationError as e:
+            for error in e.errors():
+                field = error['loc'][0] 
+                message = error['msg']   
+                print(f"\n  - {field}: {message}")
+            input("\nPress Enter to continue...")
+            
+        except (ValueError, TypeError) as e:
+            print(f"\nInvalid input format: Please check the values you entered.")
+            input("\nPress Enter to continue...")
+            
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
@@ -30,8 +43,13 @@ class SongController:
     def get_song_by_id():
         try:
             song_id = int(input("\n\nEnter song ID: ").strip())
-            song = SongService.get_by_id(song_id)
+            SongService.get_by_id(song_id)
             input("\nPress Enter to continue...")
+            
+        except ValueError:
+            print("\nInvalid ID: Please enter a valid number.")
+            input("\nPress Enter to continue...")
+            
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
@@ -45,6 +63,18 @@ class SongController:
             updated_song = SongService.update(song_id, song_data)
             print(f"\n\nSong ID {updated_song.id} updated successfully.")
             input("\nPress Enter to continue...")
+        
+        except ValidationError as e:
+            for error in e.errors():
+                field = error['loc'][0] 
+                message = error['msg']   
+                print(f"\n  - {field}: {message}")
+            input("\nPress Enter to continue...")
+            
+        except (ValueError, TypeError) as e:
+            print(f"\nInvalid input format: Please check the values you entered.")
+            input("\nPress Enter to continue...")
+            
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
@@ -56,6 +86,11 @@ class SongController:
             SongService.delete(song_id)
             print(f"\n\nSong ID {song_id} deleted successfully.")
             input("\nPress Enter to continue...")
+
+        except ValueError:
+            print("\nInvalid ID: Please enter a valid number.")
+            input("\nPress Enter to continue...")
+
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
@@ -68,8 +103,8 @@ class SongController:
         artist = input("Enter artist name: ").strip()
         album = input("Enter album name (optional): ").strip() or None
         genre = input("Enter genre (optional): ").strip() or None
-        year_input = input("Enter year (optional): ").strip() or None
-        year = int(year_input) if year_input else None
+        date_input = input("Enter release date (YYYY-MM-DD, optional): ").strip() or None
+        release_date = datetime.strptime(date_input, "%Y-%m-%d").date() if date_input else None
         duration_input = input("Enter duration in seconds (optional): ").strip() or None
         duration = float(duration_input) if duration_input else None
         
@@ -78,7 +113,7 @@ class SongController:
             artist=artist,
             album=album,
             genre=genre,
-            year=year,
+            release_date=release_date,
             duration=duration
         )
         
