@@ -1,12 +1,13 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import Optional
 from datetime import date
 
 
 class SongRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
 
-    title: str = Field(..., min_length=1, strip_whitespace=True)
-    artist: str = Field(..., min_length=1, strip_whitespace=True)
+    title: str = Field(..., min_length=1)
+    artist: str = Field(..., min_length=1)
     album: Optional[str] = None
     genre: Optional[str] = None
     release_date: Optional[date] = None
