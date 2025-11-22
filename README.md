@@ -1,6 +1,6 @@
 # Song Manager App
 
-**O objetivo do projeto era desenvolver uma aplicação CLI para gerenciar um recurso simples (música) utilizando SQLite, com propriedades obrigatórias e opcionais, implementando operações CRUD completas, scripts SQL, validação de dados, logging e containerização Docker.**
+**Aplicação CLI para gerenciar um recurso simples (música) utilizando SQLite, com propriedades obrigatórias e opcionais, implementando operações CRUD completas, scripts SQL, validação de dados, logging e containerização Docker.**
 
 
 ---
@@ -26,7 +26,7 @@
 - **title** e **artist**: Não podem ser vazios ou conter apenas espaços
 - **Campos de texto**: Espaços no início e fim são removidos automaticamente
 - **Campos opcionais**: Strings vazias são convertidas para `None`
-- **duration**: Validação manual no controller para garantir valores positivos
+- **duration**: Validação para garantir valores positivos
 
 ---
 
@@ -323,8 +323,8 @@ song-manager-app/
 │   ├── database/
 │   │   ├── config.py                # Configuração SQLAlchemy
 │   │   ├── create_schema.sql       # Script SQL de criação
-│   │   ├── drop_schema.sql         # Script SQL de remoção
-│   │   └── run_create_schema.py    # Executor do script SQL
+│   │   ├── run_create_schema.py    # Executor do script SQL
+│   │   └── songs.db                 # Banco de dados SQLite (gerado)
 │   ├── models/
 │   │   └── song.py                  # Model SQLAlchemy (Song)
 │   ├── schemas/
@@ -341,10 +341,10 @@ song-manager-app/
 │   ├── conftest.py                  # Fixtures do pytest
 │   ├── test_input_validation.py    # Testes de validação Pydantic
 │   ├── test_song_service_create.py # Testes do método create()
-│   ├── test_song_service_get_by_id.py
-│   ├── test_song_service_update.py
-│   ├── test_song_service_delete.py
-│   └── test_song_service_list.py
+│   ├── test_song_service_get_by_id.py # Testes do método get_by_id()
+│   ├── test_song_service_update.py # Testes do método update()
+│   ├── test_song_service_delete.py # Testes do método delete()
+│   └── test_song_service_list.py # Testes do método list()
 ├── .dockerignore                    # Arquivos ignorados no build Docker
 ├── .env                             # Variáveis de ambiente
 ├── .gitignore                       # Arquivos ignorados no Git
