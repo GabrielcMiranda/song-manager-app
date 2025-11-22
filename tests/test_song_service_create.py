@@ -1,0 +1,162 @@
+from datetime import date
+from unittest.mock import patch
+from app.models.song import Song
+from app.schemas.song_schema import SongRequest
+from app.services.song_service import SongService
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_returns_song_with_id(mock_get_session, test_db):
+    
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    song_data = SongRequest(
+        title="Hotel California",
+        artist="Eagles"
+    )
+    
+    result = SongService.create(song_data)
+    
+    assert result is not None
+    assert result.id is not None
+    assert result.title == "Hotel California"
+    assert result.artist == "Eagles"
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_with_all_optional_fields(mock_get_session, test_db):
+
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    song_data = SongRequest(
+        title="Stairway to Heaven",
+        artist="Led Zeppelin",
+        album="Led Zeppelin IV",
+        genre="Rock",
+        release_date=date(1971, 11, 8),
+        duration=482.0
+    )
+    
+    result = SongService.create(song_data)
+    
+    assert result.title == "Stairway to Heaven"
+    assert result.artist == "Led Zeppelin"
+    assert result.album == "Led Zeppelin IV"
+    assert result.genre == "Rock"
+    assert result.release_date == date(1971, 11, 8)
+    assert result.duration == 482.0
+    assert result.created_at is not None
+    assert result.updated_at is not None
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_with_optional_fields_as_none(mock_get_session, test_db):
+
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    song_data = SongRequest(
+        title="Test Song",
+        artist="Test Artist",
+        album=None,
+        genre=None,
+        release_date=None,
+        duration=None
+    )
+    
+    result = SongService.create(song_data)
+    
+    assert result.album is None
+    assert result.genre is None
+    assert result.release_date is None
+    assert result.duration is None
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_persists_to_database(mock_get_session, test_db):
+   
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    song_data = SongRequest(
+        title="Imagine",
+        artist="John Lennon"
+    )
+    
+    result = SongService.create(song_data)
+
+    saved_song = test_db.query(Song).filter(Song.id == result.id).first()
+    assert saved_song is not None
+    assert saved_song.title == "Imagine"
+    assert saved_song.artist == "John Lennon"
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_multiple_songs(mock_get_session, test_db):
+  
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    songs_data = [
+        SongRequest(title="Song 1", artist="Artist 1"),
+        SongRequest(title="Song 2", artist="Artist 2"),
+        SongRequest(title="Song 3", artist="Artist 3")
+    ]
+    
+    created_songs = []
+    for song_data in songs_data:
+        result = SongService.create(song_data)
+        created_songs.append(result)
+    
+    assert len(created_songs) == 3
+    assert all(song.id is not None for song in created_songs)
+    assert created_songs[0].title == "Song 1"
+    assert created_songs[1].title == "Song 2"
+    assert created_songs[2].title == "Song 3"
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_with_special_characters(mock_get_session, test_db):
+    """Testa criação com caracteres especiais no título e artista"""
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    song_data = SongRequest(
+        title="Ça C'est Vraiment Toi!",
+        artist="Édith Piaf & Thérèse"
+    )
+    
+    result = SongService.create(song_data)
+    
+    assert result.title == "Ça C'est Vraiment Toi!"
+    assert result.artist == "Édith Piaf & Thérèse"
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_with_zero_duration(mock_get_session, test_db):
+   
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    song_data = SongRequest(
+        title="Test Song",
+        artist="Test Artist",
+        duration=0.0
+    )
+    
+    result = SongService.create(song_data)
+    
+    assert result.duration == 0.0
+
+
+@patch('app.services.song_service.get_session')
+def test_service_create_timestamps_are_set(mock_get_session, test_db):
+    
+    mock_get_session.return_value.__enter__.return_value = test_db
+    
+    song_data = SongRequest(
+        title="Test Song",
+        artist="Test Artist"
+    )
+    
+    result = SongService.create(song_data)
+    
+    assert result.created_at is not None
+    assert result.updated_at is not None
+
+    assert (result.updated_at - result.created_at).total_seconds() < 1
