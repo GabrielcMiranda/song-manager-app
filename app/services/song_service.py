@@ -18,7 +18,6 @@ class SongService:
             for song in result:
                 print(f"\n\nSong #{song.id}: {song.title} by {song.artist} - {song.year}")
             
-            return result
     
     @staticmethod
     def create(song_data: SongRequest):
@@ -38,7 +37,6 @@ class SongService:
             session.commit()
             session.refresh(new_song) 
             
-            return new_song
     
     @staticmethod
     def get_by_id(song_id: int):
@@ -55,7 +53,6 @@ class SongService:
                   f"\n album: {song.album}\n genre: {song.genre}\n duration: {song_duration}\n"
                   f" song created at: {song.created_at}\n last update at: {song.updated_at}")
             
-            return song
         
     @staticmethod
     def update(song_id: int, song_data: SongRequest):
@@ -77,6 +74,19 @@ class SongService:
             session.commit()
             session.refresh(song)
             
-            return song
+        
+    @staticmethod
+    def delete(song_id: int):
+        
+        with get_session() as session:
+            
+            song = session.query(Song).filter(Song.id == song_id).first()
+            
+            if not song:
+                raise Exception(f"\n\nSong with ID {song_id} not found!")
+            
+            session.delete(song)
+            session.commit()
+            
         
     

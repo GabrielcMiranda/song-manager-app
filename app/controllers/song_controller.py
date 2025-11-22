@@ -13,8 +13,6 @@ class SongController:
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
-            return []
-        return songs
 
     @staticmethod
     def create_song():
@@ -27,8 +25,6 @@ class SongController:
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
-            return None                
-        return new_song
           
     @staticmethod
     def get_song_by_id():
@@ -39,8 +35,6 @@ class SongController:
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
-            return None
-        return song
     
     @staticmethod
     def update_song():
@@ -54,8 +48,18 @@ class SongController:
         except Exception as e:
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
-            return None
-        return updated_song
+    
+    @staticmethod
+    def delete_song():
+        try:
+            song_id = int(input("\n\nEnter song ID to delete: ").strip())
+            SongService.delete(song_id)
+            print(f"\n\nSong ID {song_id} deleted successfully.")
+            input("\nPress Enter to continue...")
+        except Exception as e:
+            print(f"\nError: {e}")
+            input("\nPress Enter to continue...")
+            
     
 
     def request_song_data():
