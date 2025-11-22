@@ -106,7 +106,12 @@ class SongController:
         date_input = input("Enter release date (YYYY-MM-DD, optional): ").strip() or None
         release_date = datetime.strptime(date_input, "%Y-%m-%d").date() if date_input else None
         duration_input = input("Enter duration in seconds (optional): ").strip() or None
-        duration = float(duration_input) if duration_input else None
+        
+        duration = None
+        if duration_input:
+            duration = float(duration_input)
+            if duration <= 0:
+                raise ValueError()
         
         song_data = SongRequest(
             title=title,

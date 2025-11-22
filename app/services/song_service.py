@@ -50,7 +50,11 @@ class SongService:
             if not song:
                 raise Exception(f"\n\nSong with ID {song_id} not found!")
             
-            song_duration = str(song.duration) + " seconds" if song.duration is not None else None
+            song_duration = None
+            if song.duration is not None:
+                minutes = int(song.duration // 60)
+                seconds = int(song.duration % 60)
+                song_duration = f"{minutes}:{seconds:02d} min"
 
             print(f"\n\nSong #{song.id}: {song.title} by {song.artist}"
                   f"\n release date: {song.release_date}\n album: {song.album}\n genre: {song.genre}\n duration: {song_duration}"
