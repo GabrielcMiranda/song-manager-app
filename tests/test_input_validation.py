@@ -103,7 +103,7 @@ class TestReleaseDateValidation:
             SongRequest(
                 title="Test Song",
                 artist="Test Artist",
-                release_date="2023-05-15"
+                release_date="2023/05/15"
             )
 
 
@@ -111,7 +111,7 @@ class TestDurationValidation:
    
     
     def test_duration_accepts_valid_number(self):
-        
+
         song = SongRequest(
             title="Test Song",
             artist="Test Artist",
