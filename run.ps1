@@ -16,7 +16,7 @@ if ($LASTEXITCODE -eq 0) {
     
         
         Write-Host "Iniciando aplicação no Docker...`n" -ForegroundColor Yellow
-        docker run -it --rm -v ${PWD}/app/database:/app/app/database song-manager-app
+        docker run -it --rm -v ${PWD}/app/database:/app/app/database -v ${PWD}/logs:/app/logs song-manager-app
     } else {
         Write-Host "Erro ao construir imagem Docker" -ForegroundColor Red
         exit 1

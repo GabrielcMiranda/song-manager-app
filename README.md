@@ -119,8 +119,12 @@ docker build -t song-manager-app .
 
 **Executar container:**
 ```bash
-docker run -it --rm -v ${PWD}/app/database:/app/app/database song-manager-app
+docker run -it --rm -v ${PWD}/app/database:/app/app/database -v ${PWD}/logs:/app/logs song-manager-app
 ```
+
+> **Nota**: Os volumes `-v` mapeiam as pastas do container para o seu computador:
+> - `app/database` → Persiste o banco de dados SQLite
+> - `logs` → Persiste os arquivos de log (`app.log` e `errors.log`)
 
 ### Opção 3: Script Automatizado (Testes + Docker)
 
@@ -412,12 +416,13 @@ docker build -t song-manager-app .
 
 ### Executar Container (com persistência)
 ```bash
-docker run -it --rm -v ${PWD}/app/database:/app/app/database song-manager-app
+docker run -it --rm -v ${PWD}/app/database:/app/app/database -v ${PWD}/logs:/app/logs song-manager-app
 ```
 
 ### Por que usar `-v`?
-- ✅ Dados persistem entre execuções
-- ✅ Banco fica no seu computador
+- ✅ Dados persistem entre execuções (banco e logs)
+- ✅ Banco fica no seu computador (`app/database`)
+- ✅ Logs ficam no seu computador (`logs/`)
 - ❌ Sem `-v`, os dados são perdidos ao sair
 
 ---
