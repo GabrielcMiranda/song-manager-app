@@ -22,9 +22,9 @@ def setup_logger():
         log_dir / "app.log",
         encoding='utf-8'
     )
-
     app_handler.setLevel(logging.INFO)
     app_handler.setFormatter(formatter)
+    app_handler.addFilter(lambda record: record.levelno < logging.ERROR)
     
     error_handler = logging.FileHandler(
         log_dir / "errors.log",
