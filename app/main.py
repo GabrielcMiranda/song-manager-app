@@ -1,8 +1,13 @@
 from app.controllers.song_controller import SongController
 import os
 
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 while(True):
-    os.system('cls')
+    clear_screen()
     print("\n\n\n\n\n================================ SONG MANAGER ================================\n\n\n")
     print("Choose an option:")
     print("1. List songs")
@@ -30,4 +35,5 @@ while(True):
         SongController.delete_song()
 
     if choice == "6":
+        clear_screen()
         break
