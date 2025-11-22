@@ -1,6 +1,7 @@
 
 from app.schemas.song_schema import SongRequest
 from app.services.song_service import SongService
+from app.utils.logger import logger
 from datetime import datetime
 from pydantic import ValidationError
 
@@ -12,6 +13,7 @@ class SongController:
             SongService.list()
             input("\nPress Enter to continue...")
         except Exception as e:
+            logger.error(f"Error in list_songs: {str(e)}")
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
 
@@ -25,6 +27,7 @@ class SongController:
             input("\nPress Enter to continue...")
             
         except ValidationError as e:
+            logger.error(f"Validation error in create_song: {e.errors()}")
             for error in e.errors():
                 field = error['loc'][0] 
                 message = error['msg']   
@@ -32,10 +35,12 @@ class SongController:
             input("\nPress Enter to continue...")
             
         except (ValueError, TypeError) as e:
+            logger.error(f"Invalid input in create_song: {str(e)}")
             print(f"\nInvalid input format: Please check the values you entered.")
             input("\nPress Enter to continue...")
             
         except Exception as e:
+            logger.error(f"Error in create_song: {str(e)}")
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
           
@@ -46,11 +51,13 @@ class SongController:
             SongService.get_by_id(song_id)
             input("\nPress Enter to continue...")
             
-        except ValueError:
+        except ValueError as e:
+            logger.error(f"Invalid ID in get_by_id: {str(e)}")
             print("\nInvalid ID: Please enter a valid number.")
             input("\nPress Enter to continue...")
             
         except Exception as e:
+            logger.error(f"Error in get_by_id: {str(e)}")
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
     
@@ -65,6 +72,7 @@ class SongController:
             input("\nPress Enter to continue...")
         
         except ValidationError as e:
+            logger.error(f"Validation error in update_song: {e.errors()}")
             for error in e.errors():
                 field = error['loc'][0] 
                 message = error['msg']   
@@ -72,10 +80,12 @@ class SongController:
             input("\nPress Enter to continue...")
             
         except (ValueError, TypeError) as e:
+            logger.error(f"Invalid input in update_song: {str(e)}")
             print(f"\nInvalid input format: Please check the values you entered.")
             input("\nPress Enter to continue...")
             
         except Exception as e:
+            logger.error(f"Error in update_song: {str(e)}")
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
     
@@ -87,11 +97,13 @@ class SongController:
             print(f"\n\nSong ID {song_id} deleted successfully.")
             input("\nPress Enter to continue...")
 
-        except ValueError:
+        except ValueError as e:
+            logger.error(f"Invalid ID in delete_song: {str(e)}")
             print("\nInvalid ID: Please enter a valid number.")
             input("\nPress Enter to continue...")
 
         except Exception as e:
+            logger.error(f"Error in delete_song: {str(e)}")
             print(f"\nError: {e}")
             input("\nPress Enter to continue...")
             
@@ -106,7 +118,7 @@ class SongController:
         date_input = input("Enter release date (YYYY-MM-DD, optional): ").strip() or None
         release_date = datetime.strptime(date_input, "%Y-%m-%d").date() if date_input else None
         duration_input = input("Enter duration in seconds (optional): ").strip() or None
-        
+
         duration = None
         if duration_input:
             duration = float(duration_input)

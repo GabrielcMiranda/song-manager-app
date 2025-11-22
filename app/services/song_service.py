@@ -1,6 +1,7 @@
 from app.models.song import Song
 from app.database.config import get_session
 from app.schemas.song_schema import SongRequest
+from app.utils.logger import logger
 
 
 class SongService:
@@ -13,6 +14,7 @@ class SongService:
             result = session.query(Song).all()
             
             if not result:
+                logger.warning("No songs found in the database.")
                 raise Exception("\n\nNo songs found!")
             
             for song in result:
@@ -35,8 +37,9 @@ class SongService:
             
             session.add(new_song)
             session.commit()
-            session.refresh(new_song) 
-
+            session.refresh(new_song)
+            
+            logger.info(f"Song created: ID={new_song.id}, Title='{new_song.title}', Artist='{new_song.artist}'")
             return new_song
             
     
@@ -48,7 +51,10 @@ class SongService:
             song = session.query(Song).filter(Song.id == song_id).first()
             
             if not song:
+                logger.warning(f"Song not found: ID={song_id}")
                 raise Exception(f"\n\nSong with ID {song_id} not found!")
+            
+            logger.info(f"Song found: ID={song_id}, Title='{song.title}'")
             
             song_duration = None
             if song.duration is not None:
@@ -69,6 +75,7 @@ class SongService:
             song = session.query(Song).filter(Song.id == song_id).first()
             
             if not song:
+                logger.warning(f"Song not found for update: ID={song_id}")
                 raise Exception(f"\n\nSong with ID {song_id} not found!")
             
             song.title = song_data.title
@@ -80,7 +87,8 @@ class SongService:
             
             session.commit()
             session.refresh(song)
-
+            
+            logger.info(f"Song updated: ID={song_id}, Title='{song.title}'")
             return song
             
         
@@ -92,10 +100,14 @@ class SongService:
             song = session.query(Song).filter(Song.id == song_id).first()
             
             if not song:
+                logger.warning(f"Song not found for deletion: ID={song_id}")
                 raise Exception(f"\n\nSong with ID {song_id} not found!")
             
+            song_title = song.title
             session.delete(song)
             session.commit()
+            
+            logger.info(f"Song deleted: ID={song_id}, Title='{song_title}'")
             
         
     

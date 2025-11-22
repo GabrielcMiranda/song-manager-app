@@ -13,6 +13,8 @@ __pycache__/
 *.sqlite
 *.sqlite3
 
+*.log
+
 .vscode/
 .idea/
 *.swp
